@@ -52,3 +52,30 @@ function handleLogin() {
         })
         .catch(error => alert(error.message));
 }
+
+function getPlayerProfile() {
+    fetch(`${apiBaseUrl}/player/profile`, {
+        headers: { 'Authorization': token },
+    })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('profile-username').innerText = `Username: ${data.username}`;
+            document.getElementById('profile-level').innerText = `Level: ${data.level}`;
+            document.getElementById('profile-experience').innerText = `Experience: ${data.experience}`;
+            document.getElementById('profile-monsters').innerText = `Monsters: ${data.monsters.join(', ')}`;
+        })
+        .catch(error => alert('Failed to fetch profile.'));
+}
+
+function summonMonster() {
+    fetch(`${apiBaseUrl}/summonings`, {
+        method: 'POST',
+        headers: { 'Authorization': token },
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(`Summoned Monster: ${data.monsterId}`);
+            getPlayerProfile();
+        })
+        .catch(error => alert('Summoning failed.'));
+}
