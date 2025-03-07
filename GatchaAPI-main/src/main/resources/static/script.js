@@ -4,11 +4,9 @@ let token = null;
 function register() {
     const username = document.getElementById('register-username').value;
     const password = document.getElementById('register-password').value;
-
     const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
-
     fetch(`${apiBaseUrl}/auth/register`, {
         method: 'POST',
         headers: {
@@ -27,11 +25,9 @@ function register() {
 function handleLogin() {
     const username = document.getElementById('login-username').value;
     const password = document.getElementById('login-password').value;
-
     const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
-
     fetch(`${apiBaseUrl}/auth/login`, {
         method: 'POST',
         headers: {
@@ -48,14 +44,16 @@ function handleLogin() {
             alert('Login successful!');
             document.getElementById('login').style.display = 'none';
             document.getElementById('profile').style.display = 'block';
-
+            getUserProfile();
         })
         .catch(error => alert(error.message));
 }
 
-function getPlayerProfile() {
-    fetch(`${apiBaseUrl}/player/profile`, {
-        headers: { 'Authorization': token },
+function getUserProfile() {
+    fetch(`${apiBaseUrl}/user/profile`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
     })
         .then(response => response.json())
         .then(data => {
@@ -70,12 +68,22 @@ function getPlayerProfile() {
 function summonMonster() {
     fetch(`${apiBaseUrl}/summonings`, {
         method: 'POST',
-        headers: { 'Authorization': token },
+        headers: { 'Authorization': `Bearer ${token}` },
     })
         .then(response => response.json())
         .then(data => {
             alert(`Summoned Monster: ${data.monsterId}`);
-            getPlayerProfile();
+            document.getElementById('summoned-monster').style.display = 'block';
+            document.getElementById('summoned-monster-id').innerText = `Monster ID: ${data.monsterId}`;
+            document.getElementById('summoned-monster-probability').innerText = `Summoning Probability: ${data.probability}`;
+            getUserProfile();
         })
         .catch(error => alert('Summoning failed.'));
+}
+
+function handleLogout() {
+    token = null;
+    document.getElementById('login').style.display = 'block';
+    document.getElementById('profile').style.display = 'none';
+    document.getElementById('summoned-monster').style.display = 'none';
 }
