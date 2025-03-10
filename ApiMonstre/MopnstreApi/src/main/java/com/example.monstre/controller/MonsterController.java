@@ -1,9 +1,9 @@
-package com.example.mongoTuto.controller;
-import com.example.mongoTuto.MonsterDto.Element;
-import com.example.mongoTuto.MonsterDto.MonsterDto;
-import com.example.mongoTuto.model.Monster;
+package com.example.monstre.controller;
+import com.example.monstre.MonsterDto.Element;
+import com.example.monstre.MonsterDto.MonsterDto;
+import com.example.monstre.model.Monster;
 import org.springframework.web.bind.annotation.*;
-import com.example.mongoTuto.service.MonsterService;
+import com.example.monstre.service.MonsterService;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -31,7 +31,10 @@ public class MonsterController {
                 monster.getHp(),
                 monster.getLootRate(),
                 monster.getLevel(),
-                monster.getElement().toString())
+                monster.getElement().toString(),
+                monster.getSpeed(),
+                monster.getXp(),
+                monster.getSkills())
         );
         return ResponseEntity.ok("monster saved!");
     }
@@ -47,7 +50,10 @@ public class MonsterController {
                         monster.getHp(),
                         monster.getLootRate(),
                         monster.getLevel(),
-                        Element.valueOf(monster.getElement().toString()) )  )
+                        Element.valueOf(monster.getElement().toString()),
+                        monster.getSpeed(),
+                        monster.getXp(),
+                        monster.getSkills())  )
                 .toList();
                 return ResponseEntity.ok(monstersByName)  ;
     }
@@ -63,7 +69,10 @@ public class MonsterController {
                         monster.getHp(),
                         monster.getLootRate(),
                         monster.getLevel(),
-                        Element.valueOf(monster.getElement().toString()) )  )
+                        Element.valueOf(monster.getElement().toString()),
+                        monster.getSpeed(),
+                        monster.getXp(),
+                        monster.getSkills())  )
                 .toList();
         return ResponseEntity.ok(allMonsters);
     }
@@ -79,17 +88,32 @@ public class MonsterController {
                             monster.getHp(),
                             monster.getLootRate(),
                             monster.getLevel(),
-                            Element.valueOf(monster.getElement())  ))
+                            Element.valueOf(monster.getElement()),
+                            monster.getSpeed(),
+                            monster.getXp(),
+                            monster.getSkills())  )
                             .toList();
               return ResponseEntity.ok(elementMonsters);
     }
 
-    @PutMapping("/levelup/id={id}")
-    public ResponseEntity<Monster> levelUpMonster (@PathVariable String id) {
+    @PutMapping("/levelup/id={id}/skill={skillIndex}")
+    public ResponseEntity<Monster> levelUpMonster (@PathVariable String id,@PathVariable int skillIndex) {
         //Monster toLevelUp = service.findById("Dracaufeu").getFirst();
         //int oldLevel = toLevelUp.getLevel();
-        Monster updatedMonster = service.updateMonster(id);
+        Monster updatedMonster = service.updateMonster(id,skillIndex);
         //int newLevel = toLevelUp.getLevel();
         return ResponseEntity.ok(updatedMonster);
+    }
+
+    @PutMapping("/giveXp/id={id}/skill={skillIndex}")
+    public ResponseEntity<Monster> giveXp (@PathVariable String id,@PathVariable int skillIndex) {
+       Monster updatedMonster = service.giveXp(id,skillIndex);
+       return ResponseEntity.ok(updatedMonster);
+    }
+
+    @DeleteMapping("/delete/id={id}")
+    public ResponseEntity<Void> deleteMonster(@PathVariable String id){
+       service.deleteMonster(id);
+       return ResponseEntity.noContent().build();
     }
 }

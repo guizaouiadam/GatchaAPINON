@@ -1,4 +1,4 @@
-package com.example.mongoTuto.MonsterDto;
+package com.example.monstre.MonsterDto;
 
 public enum Element {
     Feu,

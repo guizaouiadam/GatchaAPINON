@@ -1,21 +1,25 @@
-package com.example.mongoTuto.model;
+package com.example.monstre.model;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 //import org.springframework.data.annotation.Id;
 
 //Model
-@Setter
-@Getter
+
 public class Monster {
     private String element;
     private String name;
     private int attack;
     private int defense;
     private int hp;
+    private int speed;
+    private int xp;
     private double lootRate;
     private int level;
     private String id;
+    private List<Skill> skills;
 
     public String getName(){
         return name;
@@ -35,7 +39,9 @@ public class Monster {
     public double getLootRate(){
         return lootRate;
     }
-
+    public int getSpeed(){return speed;}
+    public int getXp(){return xp;}
+    public List<Skill> getSkills(){return skills;}
     public String getElement() {
         return element;
     }
@@ -43,13 +49,17 @@ public class Monster {
     public void setLevel(int level) {
         this.level = level;
     }
-
+    public void setAttack(int attack){this.attack=attack;}
+    public void setDefense(int defense){this.defense=defense;}
+    public void setHp(int hp){this.hp=hp;}
+    public void setSpeed(int speed){this.speed=speed;}
+    public void setXp(int xp) {this.xp = xp;}
     public String getId() {
         return id;
     }
 
 
-    public Monster(String name,String id,int attack, int defense, int hp, double lootRate, int level,String element) {
+    public Monster(String name,String id,int attack, int defense, int hp, double lootRate, int level,String element,int speed,int xp,List<Skill> skills) {
         this.name = name;
         this.attack= attack;
         this.defense = defense;
@@ -58,6 +68,9 @@ public class Monster {
         this.level = level;
         this.element = element;
         this.id=id;
+        this.speed=speed;
+        this.xp=xp;
+        this.skills=skills;
     }
 
     public void levelUp(){

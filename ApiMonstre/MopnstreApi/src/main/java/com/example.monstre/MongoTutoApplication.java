@@ -1,4 +1,4 @@
-package com.example.mongoTuto;
+package com.example.monstre;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

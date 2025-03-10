@@ -1,4 +1,4 @@
-package com.example.mongoTuto.repository;
+package com.example.monstre.repository;
 
 import com.example.mongoTuto.model.Monster;
 import org.springframework.data.mongodb.repository.MongoRepository;
