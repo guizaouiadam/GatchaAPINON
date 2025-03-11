@@ -25,4 +25,4 @@ RUN ls -l target
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "target/GatchaAPI-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/AuthAPI-0.0.1-SNAPSHOT.jar"]

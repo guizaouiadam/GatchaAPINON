@@ -9,7 +9,7 @@ services:
 
   app:
     image: openjdk:17-jdk
-    container_name: gatcha-app
+    container_name: auth-api
     build:
       context: .
       dockerfile: Dockerfile
