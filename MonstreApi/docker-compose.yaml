@@ -28,7 +28,8 @@ services:
       start_period: 10s
 
   api-monstre:
-    build: ..
+    build:
+      dockerfile : Dockerfile
     container_name:  api-monstre
     ports:
       - 8080:8080
