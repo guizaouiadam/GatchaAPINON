@@ -1,0 +1,42 @@
+services:
+  mongo-docker:
+    image: mongo
+    container_name: mongo-docker
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-docker:/data/db
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    restart: on-failure
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--quiet",
+          "127.0.0.1/admin",
+          "--eval",
+          "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api-monstre:
+    build: ..
+    container_name:  api-monstre
+    ports:
+      - 8080:8080
+    links:
+      - mongo-docker
+    depends_on:
+      mongo-docker:
+        condition: service_healthy
+
+volumes:
+  mongo-docker:
