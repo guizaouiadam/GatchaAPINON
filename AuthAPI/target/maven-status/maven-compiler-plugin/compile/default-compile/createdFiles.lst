@@ -1,8 +1,0 @@
-com\example\gatchaapi\model\User.class
-com\example\gatchaapi\repository\UserRepository.class
-com\example\gatchaapi\GatchaApiApplication.class
-com\example\gatchaapi\model\Skill.class
-com\example\gatchaapi\controller\UserController.class
-com\example\gatchaapi\service\AuthService.class
-com\example\gatchaapi\controller\AuthController.class
-com\example\gatchaapi\service\UserService.class
