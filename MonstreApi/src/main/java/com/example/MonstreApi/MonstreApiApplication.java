@@ -11,5 +11,4 @@ public class MonstreApiApplication {
 		SpringApplication.run(MonstreApiApplication.class, args);
 	}
 
-
 }
