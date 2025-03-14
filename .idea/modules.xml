@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/JeuGatcha/GatchaAPI.iml" filepath="$PROJECT_DIR$/JeuGatcha/GatchaAPI.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/GatchaAPI-nouvelle-branche.iml" filepath="$PROJECT_DIR$/.idea/GatchaAPI-nouvelle-branche.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MonstreApi/MonstreApi.iml" filepath="$PROJECT_DIR$/MonstreApi/MonstreApi.iml" />
     </modules>
   </component>
 </project>
