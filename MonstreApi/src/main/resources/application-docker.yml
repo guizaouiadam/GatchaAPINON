@@ -1,9 +1,0 @@
-spring:
-  data:
-    mongodb:
-      host: mongo-docker
-      port: 27017
-      username: mongoadmin
-      password: password
-      authentication-database: admin
-      database: gatcha

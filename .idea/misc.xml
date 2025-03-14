@@ -4,16 +4,13 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/AuthAPI/pom.xml" />
-        <option value="$PROJECT_DIR$/MonstreApi/pom.xml" />
-        <option value="$PROJECT_DIR$/JeuGatcha/pom.xml" />
+        <option value="$PROJECT_DIR$/monstre-api/pom.xml" />
+        <option value="$PROJECT_DIR$/auth-api/pom.xml" />
+        <option value="$PROJECT_DIR$/player-api/pom.xml" />
       </list>
     </option>
-    <option name="ignoredFiles">
-      <set>
-        <option value="$PROJECT_DIR$/AuthAPI/pom.xml" />
-      </set>
-    </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" project-jdk-name="23" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="23" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
 </project>
