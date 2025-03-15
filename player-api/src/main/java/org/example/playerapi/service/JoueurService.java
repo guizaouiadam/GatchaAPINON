@@ -90,7 +90,11 @@ public class JoueurService {
         Optional<Joueur> joueurOpt = joueurRepository.findById(id);
         if (joueurOpt.isPresent()) {
             Joueur joueur = joueurOpt.get();
-            if (joueur.getMonstres().size() < joueur.getLevel() + 10) {
+            if(joueur.getMonstres()==null){
+                joueur.getMonstres().add(monstreId);
+                return joueurRepository.save(joueur);
+            }
+            else if (joueur.getMonstres().size() < joueur.getLevel() + 10) {
                 joueur.getMonstres().add(monstreId);
                 return joueurRepository.save(joueur);
             }
