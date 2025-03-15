@@ -6,9 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="player-api" />
         <module name="auth-api" />
         <module name="monstre-api" />
+        <module name="player-api" />
+        <module name="invocation-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -19,6 +20,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-api" options="-parameters" />
+      <module name="invocation-api" options="-parameters" />
       <module name="monstre-api" options="-parameters" />
       <module name="player-api" options="-parameters" />
     </option>

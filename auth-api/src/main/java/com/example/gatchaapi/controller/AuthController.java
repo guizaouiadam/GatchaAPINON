@@ -21,9 +21,10 @@ public class AuthController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<Boolean> validate(@RequestParam String token) {
-        boolean isValid = authService.validateToken(token);
-        return ResponseEntity.ok(isValid);
+    public ResponseEntity<String> validate(@RequestParam String token) {
+        String userId = authService.validateToken(token);
+        return ResponseEntity.ok(userId);
+
     }
 
     @PostMapping("/register")

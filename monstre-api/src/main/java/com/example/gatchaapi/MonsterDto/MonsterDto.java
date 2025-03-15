@@ -12,7 +12,6 @@ public class MonsterDto {
     private int attack;
     private int defense;
     private int hp;
-    private double lootRate;
     private int xp;
     private int level;
     private List<Skill> skills;
@@ -41,9 +40,6 @@ public class MonsterDto {
 
     public int getXp(){return xp;}
     public int getSpeed(){ return speed;}
-    public double getLootRate(){
-        return lootRate;
-    }
     public Element getElement(){
         return element;
     }
@@ -52,12 +48,11 @@ public class MonsterDto {
         return id;
     }
 
-    public MonsterDto(String name,String id,int attack,int defense,int hp, double lootRate,int level,Element element,int speed,int xp,List<Skill> skills ){
+    public MonsterDto(String name,String id,int attack,int defense,int hp,int level,Element element,int speed,int xp,List<Skill> skills ){
         this.name = name;
         this.attack= attack;
         this.defense = defense;
         this.hp = hp;
-        this.lootRate = lootRate;
         this.level = level;
         this.element = element;
         this.id = id;

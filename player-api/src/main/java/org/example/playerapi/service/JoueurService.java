@@ -3,13 +3,14 @@ package org.example.playerapi.service;
 import org.example.playerapi.model.Joueur;
 import org.example.playerapi.repository.JoueurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -20,50 +21,58 @@ public class JoueurService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private String validateToken(String token) {
-        String authUrl = "http://localhost:8081/api/auth/validate?token=" + token;
-        ResponseEntity<Boolean> response = restTemplate.getForEntity(authUrl, Boolean.class);
-        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && response.getBody()) {
-            return "Valid";
-        } else {
-            throw new RuntimeException("Invalid or expired token");
+
+    public String getUserIdByToken(String token) {
+        String authUrl = "http://auth-api:8081/api/auth/validate?token=" + token;
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(authUrl, String.class);
+            System.out.println("Response: " + response);
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                return response.getBody(); // Return the user ID
+            } else {
+                throw new RuntimeException("Invalid or expired token");
+            }
+        } catch (ResourceAccessException e) {
+            System.err.println("Connection refused: " + e.getMessage());
+            throw new RuntimeException("Unable to connect to auth service", e);
+        } catch (RestClientException e) {
+            System.err.println("Error during REST call: " + e.getMessage());
+            throw new RuntimeException("Error during REST call", e);
         }
     }
-    @PostMapping
-    public Optional<Joueur> getJoueur(String id, String token) {
-        validateToken(token);
-        return joueurRepository.findById(id);
+
+    public Optional<Joueur> getJoueurByToken(String token) {
+        String userId = getUserIdByToken(token);
+        Optional<Joueur> joueurOpt = joueurRepository.findByUserId(userId);
+        if (joueurOpt.isEmpty()) {
+            Joueur newJoueur = new Joueur();
+            newJoueur.setUserId(userId);
+            newJoueur.setLevel(1);
+            newJoueur.setExperience(0);
+            newJoueur.setMonstres(new ArrayList<>());
+            joueurRepository.save(newJoueur);
+            return Optional.of(newJoueur);
+        }
+        return joueurOpt;
     }
 
-    public Joueur saveJoueur(Joueur joueur, String token) {
-        validateToken(token);
-        return joueurRepository.save(joueur);
-    }
-
-    public void deleteJoueur(String id, String token) {
-        validateToken(token);
-        joueurRepository.deleteById(id);
-    }
-
-    public Joueur gainExperience(String id, int experience, String token) {
-        validateToken(token);
-        Optional<Joueur> joueurOpt = joueurRepository.findById(id);
+    public Joueur gainExperience(String token, int experience) {
+        Optional<Joueur> joueurOpt = getJoueurByToken(token);
         if (joueurOpt.isPresent()) {
-            Joueur joueur = joueurOpt.get();
-            joueur.setExperience(joueur.getExperience() + experience);
-            while (joueur.getExperience() >= getExperienceThreshold(joueur.getLevel())) {
-                joueur.setExperience(joueur.getExperience() - getExperienceThreshold(joueur.getLevel()));
-                joueur.setLevel(joueur.getLevel() + 1);
-                joueur.getMonstres().add(null); // Increase the size of the monster list
+            Joueur j = joueurOpt.get();
+            j.setExperience(j.getExperience() + experience);
+            while (j.getExperience() >= getExperienceThreshold(j.getLevel())) {
+                j.setExperience(j.getExperience() - getExperienceThreshold(j.getLevel()));
+                j.setLevel(j.getLevel() + 1);
             }
-            return joueurRepository.save(joueur);
+            return joueurRepository.save(j);
         }
         return null;
     }
 
-    public Joueur addMonstre(String id, String monstreId, String token) {
-        validateToken(token);
-        Optional<Joueur> joueurOpt = joueurRepository.findById(id);
+
+    public Joueur addMonstre(String monstreId, String token) {
+        Optional<Joueur> joueurOpt = getJoueurByToken(token);
         if (joueurOpt.isPresent()) {
             Joueur joueur = joueurOpt.get();
             if (joueur.getMonstres().size() < joueur.getLevel() + 10) {
@@ -74,9 +83,8 @@ public class JoueurService {
         return null;
     }
 
-    public Joueur removeMonstre(String id, String monstreId, String token) {
-        validateToken(token);
-        Optional<Joueur> joueurOpt = joueurRepository.findById(id);
+    public Joueur removeMonstre(String monstreId, String token) {
+        Optional<Joueur> joueurOpt = getJoueurByToken(token);
         if (joueurOpt.isPresent()) {
             Joueur joueur = joueurOpt.get();
             joueur.getMonstres().remove(monstreId);

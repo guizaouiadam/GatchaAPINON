@@ -8,6 +8,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+        - gatcha-network
 
   auth-api:
     build:
@@ -19,6 +21,8 @@ services:
       - mongodb
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/gatcha
+    networks:
+        - gatcha-network
 
   monstre-api:
     build:
@@ -30,17 +34,37 @@ services:
       - mongodb
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/gatcha
+    networks:
+        - gatcha-network
 
   player-api:
     build:
       context: ./player-api
     container_name: player-api
     ports:
-      - "8080:8080"
+      - "8082:8082"
     depends_on:
       - mongodb
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/gatcha
+    networks:
+        - gatcha-network
+
+  invocation-api:
+    build:
+      context: ./invocation-api
+    container_name: invocation-api
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/gatcha
+    networks:
+        - gatcha-network
 
 volumes:
   mongo-data:
+
+networks:
+    gatcha-network:

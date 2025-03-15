@@ -10,46 +10,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/monsters")
+@RequestMapping("/api/monsters")
 public class MonsterController {
 
     private final MonsterService service;
     public MonsterController(MonsterService service) {this.service = service;}
-    @GetMapping("/getLog")
-    String log (){
-        String log ="Ceci est une requête, code : ";
-        log +=401;
-        return log;
-    }
+
 
     @PostMapping("/save")
-    public ResponseEntity<String> monsters (@RequestBody MonsterDto monster){
-        service.saveMonster(new Monster(
+    public ResponseEntity<String> monsters (@RequestBody MonsterDto monster, @RequestHeader("Authorization") String token) {
+
+        String monsterId = service.saveMonster(new Monster(
                 monster.getName(),
-                monster.getId(),
                 monster.getAttack(),
                 monster.getDefense(),
                 monster.getHp(),
-                monster.getLootRate(),
                 monster.getLevel(),
                 monster.getElement().toString(),
                 monster.getSpeed(),
                 monster.getXp(),
-                monster.getSkills())
+                monster.getSkills()),
+                token
         );
-        return ResponseEntity.ok("monster saved!");
+        return ResponseEntity.ok(monsterId);
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<List<MonsterDto>> getmonsters (@PathVariable String name) {
-        List<MonsterDto> monstersByName = service.findByName(name)
+    public ResponseEntity<List<MonsterDto>> getmonsters (@PathVariable String name, @RequestHeader("Authorization") String token) {
+        List<MonsterDto> monstersByName = service.findByName(name, token)
                 .stream()
                 .map(monster -> new MonsterDto(monster.getName(),
                         monster.getId(),
                         monster.getAttack(),
                         monster.getDefense(),
                         monster.getHp(),
-                        monster.getLootRate(),
                         monster.getLevel(),
                         Element.valueOf(monster.getElement().toString()),
                         monster.getSpeed(),
@@ -60,15 +54,14 @@ public class MonsterController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<MonsterDto>> getAllMonsters() {
-        List<MonsterDto> allMonsters = service.findAll()
+    public ResponseEntity<List<MonsterDto>> getAllMonsters(@RequestHeader("Authorization") String token) {
+        List<MonsterDto> allMonsters = service.findAll(token)
                 .stream()
                 .map(monster -> new MonsterDto(monster.getName(),
                         monster.getId(),
                         monster.getAttack(),
                         monster.getDefense(),
                         monster.getHp(),
-                        monster.getLootRate(),
                         monster.getLevel(),
                         Element.valueOf(monster.getElement().toString()),
                         monster.getSpeed(),
@@ -79,15 +72,14 @@ public class MonsterController {
     }
 
     @GetMapping("/elements/{element}")
-    public ResponseEntity<List<MonsterDto>> getMonstersElement(@PathVariable String element)   {
-        List<MonsterDto> elementMonsters = service.findElement(element)
+    public ResponseEntity<List<MonsterDto>> getMonstersElement(@PathVariable String element, @RequestHeader("Authorization") String token) {
+        List<MonsterDto> elementMonsters = service.findElement(element, token)
                 .stream()
                 .map(monster -> new MonsterDto(monster.getName(),
                         monster.getId(),
                         monster.getAttack(),
                         monster.getDefense(),
                         monster.getHp(),
-                        monster.getLootRate(),
                         monster.getLevel(),
                         Element.valueOf(monster.getElement()),
                         monster.getSpeed(),
@@ -98,23 +90,23 @@ public class MonsterController {
     }
 
     @PutMapping("/levelup/id={id}/skill={skillIndex}")
-    public ResponseEntity<Monster> levelUpMonster (@PathVariable String id,@PathVariable int skillIndex) {
+    public ResponseEntity<Monster> levelUpMonster (@PathVariable String id,@PathVariable int skillIndex, @RequestHeader("Authorization") String token) {
         //Monster toLevelUp = service.findById("Dracaufeu").getFirst();
         //int oldLevel = toLevelUp.getLevel();
-        Monster updatedMonster = service.updateMonster(id,skillIndex);
+        Monster updatedMonster = service.updateMonster(id,skillIndex, token);
         //int newLevel = toLevelUp.getLevel();
         return ResponseEntity.ok(updatedMonster);
     }
 
     @PutMapping("/giveXp/id={id}/skill={skillIndex}")
-    public ResponseEntity<Monster> giveXp (@PathVariable String id,@PathVariable int skillIndex) {
-        Monster updatedMonster = service.giveXp(id,skillIndex);
+    public ResponseEntity<Monster> giveXp (@PathVariable String id,@PathVariable int skillIndex, @RequestHeader("Authorization") String token) {
+        Monster updatedMonster = service.giveXp(id,skillIndex, token);
         return ResponseEntity.ok(updatedMonster);
     }
 
     @DeleteMapping("/delete/id={id}")
-    public ResponseEntity<Void> deleteMonster(@PathVariable String id){
-        service.deleteMonster(id);
+    public ResponseEntity<Void> deleteMonster(@PathVariable String id, @RequestHeader("Authorization") String token) {
+        service.deleteMonster(id, token);
         return ResponseEntity.noContent().build();
     }
 }
