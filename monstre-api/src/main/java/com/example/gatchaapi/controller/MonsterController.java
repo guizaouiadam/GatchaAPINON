@@ -15,15 +15,10 @@ public class MonsterController {
 
     private final MonsterService service;
     public MonsterController(MonsterService service) {this.service = service;}
-    @GetMapping("/getLog")
-    String log (){
-        String log ="Ceci est une requête, code : ";
-        log +=401;
-        return log;
-    }
+
 
     @PostMapping("/save")
-    public ResponseEntity<String> monsters (@RequestBody MonsterDto monster){
+    public ResponseEntity<String> monsters (@RequestBody MonsterDto monster,@RequestHeader String token) {
         service.saveMonster(new Monster(
                 monster.getName(),
                 monster.getId(),
@@ -35,14 +30,14 @@ public class MonsterController {
                 monster.getElement().toString(),
                 monster.getSpeed(),
                 monster.getXp(),
-                monster.getSkills())
+                monster.getSkills()),token
         );
         return ResponseEntity.ok("monster saved!");
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<List<MonsterDto>> getmonsters (@PathVariable String name) {
-        List<MonsterDto> monstersByName = service.findByName(name)
+    public ResponseEntity<List<MonsterDto>> getmonsters (@PathVariable String name,@RequestHeader String token) {
+        List<MonsterDto> monstersByName = service.findByName(name,token)
                 .stream()
                 .map(monster -> new MonsterDto(monster.getName(),
                         monster.getId(),
@@ -60,8 +55,8 @@ public class MonsterController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<MonsterDto>> getAllMonsters() {
-        List<MonsterDto> allMonsters = service.findAll()
+    public ResponseEntity<List<MonsterDto>> getAllMonsters(@RequestHeader String token) {
+        List<MonsterDto> allMonsters = service.findAll(token)
                 .stream()
                 .map(monster -> new MonsterDto(monster.getName(),
                         monster.getId(),
@@ -79,8 +74,8 @@ public class MonsterController {
     }
 
     @GetMapping("/elements/{element}")
-    public ResponseEntity<List<MonsterDto>> getMonstersElement(@PathVariable String element)   {
-        List<MonsterDto> elementMonsters = service.findElement(element)
+    public ResponseEntity<List<MonsterDto>> getMonstersElement(@PathVariable String element,@RequestHeader String token  )   {
+        List<MonsterDto> elementMonsters = service.findElement(element,token)
                 .stream()
                 .map(monster -> new MonsterDto(monster.getName(),
                         monster.getId(),
@@ -98,23 +93,23 @@ public class MonsterController {
     }
 
     @PutMapping("/levelup/id={id}/skill={skillIndex}")
-    public ResponseEntity<Monster> levelUpMonster (@PathVariable String id,@PathVariable int skillIndex) {
+    public ResponseEntity<Monster> levelUpMonster (@PathVariable String id,@PathVariable int skillIndex,@RequestHeader String token) {
         //Monster toLevelUp = service.findById("Dracaufeu").getFirst();
         //int oldLevel = toLevelUp.getLevel();
-        Monster updatedMonster = service.updateMonster(id,skillIndex);
+        Monster updatedMonster = service.updateMonster(id,skillIndex,token);
         //int newLevel = toLevelUp.getLevel();
         return ResponseEntity.ok(updatedMonster);
     }
 
     @PutMapping("/giveXp/id={id}/skill={skillIndex}")
-    public ResponseEntity<Monster> giveXp (@PathVariable String id,@PathVariable int skillIndex) {
-        Monster updatedMonster = service.giveXp(id,skillIndex);
+    public ResponseEntity<Monster> giveXp (@PathVariable String id,@PathVariable int skillIndex,@RequestHeader String token) {
+        Monster updatedMonster = service.giveXp(id,skillIndex,token);
         return ResponseEntity.ok(updatedMonster);
     }
 
     @DeleteMapping("/delete/id={id}")
-    public ResponseEntity<Void> deleteMonster(@PathVariable String id){
-        service.deleteMonster(id);
+    public ResponseEntity<Void> deleteMonster(@PathVariable String id,@RequestHeader String token) {
+        service.deleteMonster(id,token);
         return ResponseEntity.noContent().build();
     }
 }

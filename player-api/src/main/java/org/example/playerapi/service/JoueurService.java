@@ -4,6 +4,8 @@ import org.example.playerapi.model.Joueur;
 import org.example.playerapi.repository.JoueurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.ResourceAccessException;
@@ -12,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +45,13 @@ public class JoueurService {
         }
     }
 
+    private List<String> getUserInfos(String token) {
+        validateToken(token);
+        String authUrl = "http://auth-api:8081/api/auth/getUserInfos?token=" + token;
+        ResponseEntity<List<String>> response = restTemplate.exchange(authUrl, HttpMethod.GET, null, new ParameterizedTypeReference<List<String>>(){});
+        return response.getBody();
+    }
+
     public Optional<Joueur> getJoueur(String id, String token) {
         validateToken(token);
         return joueurRepository.findById(id);
@@ -49,6 +59,8 @@ public class JoueurService {
 
     public Joueur saveJoueur(Joueur joueur, String token) {
         validateToken(token);
+        joueur.setId(getUserInfos(token).get(0));
+        joueur.setUserName(getUserInfos(token).get(1));
         return joueurRepository.save(joueur);
     }
 

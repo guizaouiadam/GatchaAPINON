@@ -7,8 +7,9 @@ import java.util.List;
 
 @Document(collection = "joueurs")
 public class Joueur {
-    @Id
+
     private String id;
+    private String userName ;
     private int level;
     private int experience;
     private List<String> monstres;
@@ -19,6 +20,14 @@ public class Joueur {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public int getLevel() {
@@ -46,4 +55,13 @@ public class Joueur {
     }
 
     // Getters and Setters
+
+    public String toString() {
+        return  "User {"+
+                "id:"+id+
+                "name:"+userName+
+                "level:"+level+
+                "experience:"+experience+
+                "monstres:"+monstres+"}";
+    }
 }

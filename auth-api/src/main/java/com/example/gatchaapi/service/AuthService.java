@@ -52,6 +52,11 @@ public class AuthService {
         return false;
     }
 
+    public List<String> getUserInfos(String token){
+        User user = userRepository.findByToken(token).orElseThrow(() -> new RuntimeException("User not found"));
+        return List.of(user.getId(),user.getUsername());
+    }
+
     public User registerUser(String username, String password) {
         if (userRepository.findByUsername(username).isPresent()) {
             return null;

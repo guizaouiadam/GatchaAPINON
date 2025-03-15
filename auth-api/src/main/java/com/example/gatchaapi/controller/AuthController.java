@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.gatchaapi.service.AuthService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -30,5 +32,11 @@ public class AuthController {
     public ResponseEntity<User> register(@RequestParam String username, @RequestParam String password) {
         User user = authService.registerUser(username, password);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/getUserInfos")
+    public ResponseEntity<List<String>> getUserInfos(@RequestParam String token) {
+        List<String> userInfos = authService.getUserInfos(token);
+        return ResponseEntity.ok(userInfos);
     }
 }

@@ -21,7 +21,7 @@ public class JoueurController {
 
     @PostMapping("/add")
     public ResponseEntity<Joueur> saveJoueur(@RequestBody Joueur joueur, @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(joueurService.saveJoueur(joueur, token));
+        return ResponseEntity.ok(joueurService.saveJoueur(joueur, token)); //ne rien mettre pour userName et id dans le body
     }
 
     @DeleteMapping("/{id}")
