@@ -41,7 +41,7 @@ public class JoueurService {
             throw new RuntimeException("Error during REST call", e);
         }
     }
-    @PostMapping
+
     public Optional<Joueur> getJoueur(String id, String token) {
         validateToken(token);
         return joueurRepository.findById(id);
