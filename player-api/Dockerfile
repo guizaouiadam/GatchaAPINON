@@ -22,7 +22,7 @@ RUN ./mvnw clean package -DskipTests
 RUN ls -l target
 
 # Expose the port the application runs on
-EXPOSE 8080
+EXPOSE 8082
 
 # Run the application
 CMD ["java", "-jar", "target/player-api-0.0.1-SNAPSHOT.jar"]

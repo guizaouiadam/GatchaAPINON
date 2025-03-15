@@ -19,7 +19,7 @@ public class JoueurController {
         return ResponseEntity.of(joueurService.getJoueur(id, token));
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Joueur> saveJoueur(@RequestBody Joueur joueur, @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(joueurService.saveJoueur(joueur, token));
     }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -21,12 +23,22 @@ public class JoueurService {
     private RestTemplate restTemplate;
 
     private String validateToken(String token) {
-        String authUrl = "http://localhost:8081/api/auth/validate?token=" + token;
-        ResponseEntity<Boolean> response = restTemplate.getForEntity(authUrl, Boolean.class);
-        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && response.getBody()) {
-            return "Valid";
-        } else {
-            throw new RuntimeException("Invalid or expired token");
+        System.out.println("Received token: " + token);
+        String authUrl = "http://auth-api:8081/api/auth/validate?token=" + token;
+        try {
+            ResponseEntity<Boolean> response = restTemplate.getForEntity(authUrl, Boolean.class);
+            System.out.println("Response: " + response);
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && response.getBody()) {
+                return "Valid";
+            } else {
+                throw new RuntimeException("Invalid or expired token");
+            }
+        } catch (ResourceAccessException e) {
+            System.err.println("Connection refused: " + e.getMessage());
+            throw new RuntimeException("Unable to connect to auth service", e);
+        } catch (RestClientException e) {
+            System.err.println("Error during REST call: " + e.getMessage());
+            throw new RuntimeException("Error during REST call", e);
         }
     }
     @PostMapping
