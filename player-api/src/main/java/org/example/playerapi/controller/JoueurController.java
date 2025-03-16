@@ -14,34 +14,23 @@ public class JoueurController {
     @Autowired
     private JoueurService joueurService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Joueur> getJoueur(@PathVariable String id, @RequestHeader("Authorization") String token) {
-        return ResponseEntity.of(joueurService.getJoueur(id, token));
+    @GetMapping("/profile")
+    public ResponseEntity<Joueur> getJoueur(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.of(joueurService.getJoueurByToken(token));
     }
 
-    @PostMapping
-    public ResponseEntity<Joueur> saveJoueur(@RequestBody Joueur joueur, @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(joueurService.saveJoueur(joueur, token));
+    @PostMapping("/gainExperience")
+    public ResponseEntity<Joueur> gainExperience(@RequestParam int experience, @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(joueurService.gainExperience(token, experience));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteJoueur(@PathVariable String id, @RequestHeader("Authorization") String token) {
-        joueurService.deleteJoueur(id, token);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/addMonstre")
+    public ResponseEntity<Joueur> addMonstre(@RequestParam String monstreId, @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(joueurService.addMonstre(monstreId, token));
     }
 
-    @PostMapping("/{id}/gainExperience")
-    public ResponseEntity<Joueur> gainExperience(@PathVariable String id, @RequestParam int experience, @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(joueurService.gainExperience(id, experience, token));
-    }
-
-    @PostMapping("/{id}/addMonstre")
-    public ResponseEntity<Joueur> addMonstre(@PathVariable String id, @RequestParam String monstreId, @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(joueurService.addMonstre(id, monstreId, token));
-    }
-
-    @PostMapping("/{id}/removeMonstre")
+    @PostMapping("/removeMonstre")
     public ResponseEntity<Joueur> removeMonstre(@PathVariable String id, @RequestParam String monstreId, @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(joueurService.removeMonstre(id, monstreId, token));
+        return ResponseEntity.ok(joueurService.removeMonstre(monstreId, token));
     }
 }

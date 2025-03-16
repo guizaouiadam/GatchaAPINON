@@ -39,17 +39,17 @@ public class AuthService {
         throw new RuntimeException("Invalid credentials");
     }
 
-    public boolean validateToken(String token) {
+    public String validateToken(String token) {
         Optional<User> userOpt = userRepository.findByToken(token);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             if (user.getTokenExpiration().isAfter(LocalDateTime.now())) {
                 user.setTokenExpiration(LocalDateTime.now().plusHours(1));
                 userRepository.save(user);
-                return true;
+                return user.getUsername();
             }
         }
-        return false;
+        throw new RuntimeException("Invalid or expired token");
     }
 
     public User registerUser(String username, String password) {

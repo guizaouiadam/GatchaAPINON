@@ -9,11 +9,11 @@
         <module name="auth-api" />
         <module name="monstre-api" />
         <module name="player-api" />
+        <module name="invocation-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="GatchaAPI" target="17" />
-      <module name="invocation-api" target="17" />
       <module name="MonstreApi" target="17" />
     </bytecodeTargetLevel>
   </component>

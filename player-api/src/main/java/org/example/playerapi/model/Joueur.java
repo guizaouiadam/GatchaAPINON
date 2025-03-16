@@ -8,18 +8,10 @@ import java.util.List;
 @Document(collection = "joueurs")
 public class Joueur {
     @Id
-    private String id;
+    private String userId;
     private int level;
     private int experience;
     private List<String> monstres;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public int getLevel() {
         return level;
@@ -43,6 +35,14 @@ public class Joueur {
 
     public void setMonstres(List<String> monstres) {
         this.monstres = monstres;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     // Getters and Setters

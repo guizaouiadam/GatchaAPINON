@@ -17,6 +17,8 @@ public class Monster {
     private int level;
     private String id;
     private List<Skill> skills;
+    private String userId;  // username du player qui a ce monstre
+    private static int idCounter = 10;
 
     public String getName(){
         return name;
@@ -56,7 +58,7 @@ public class Monster {
     }
 
 
-    public Monster(String name,String id,int attack, int defense, int hp, double lootRate, int level,String element,int speed,int xp,List<Skill> skills) {
+    public Monster(String name,int attack, int defense, int hp, double lootRate, int level,String element,int speed,int xp,List<Skill> skills) {
         this.name = name;
         this.attack= attack;
         this.defense = defense;
@@ -64,7 +66,7 @@ public class Monster {
         this.lootRate = lootRate;
         this.level = level;
         this.element = element;
-        this.id=id;
+        this.id= String.valueOf(generateId());
         this.speed=speed;
         this.xp=xp;
         this.skills=skills;
@@ -87,5 +89,17 @@ public class Monster {
                 "hp = "+hp+
                 "lootRate = "+lootRate+
                 "}";
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    private static synchronized int generateId() {
+        return idCounter++;
     }
 }
